@@ -1,0 +1,32 @@
+controller:
+  runAsUser: 0
+  runAsNonRoot: true
+  fsGroup: 0
+  usePodSecurityContext: false
+  containerSecurityContext:
+    runAsNonRoot: false
+    runAsUser: 0
+    runAsGroup: 0
+    allowPrivilegeEscalation: true
+    readOnlyRootFilesystem: false
+  volumes:
+    - name: jenkins-pv
+      persistentVolumeClaim:
+        claimName: jenkins-pvc
+  volumeMounts:
+    - name: jenkins-pv
+      mountPath: /var/jenkins_home
+  serviceType: NodePort
+  jenkinsUrl: http://http://192.168.64.4:31851
+
+
+  # initContainers:
+  #   - name: permissions-fix
+  #     image: busybox
+  #     command: ['sh', '-c', 'chown -R 1000:1000 /var/jenkins_home']
+  #     volumeMounts:
+  #       - name: jenkins-pv
+  #         mountPath: /var/jenkins_home
+
+
+
