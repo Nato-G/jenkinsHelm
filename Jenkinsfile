@@ -26,7 +26,8 @@ pipeline {
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
                         def appImage = docker.build(registry)
                         appImage.push()
-                }
+                    }
+                }    
             }
         }
         stage('deploy image') {
@@ -42,6 +43,3 @@ pipeline {
         }
     }
 }
-
-
-
