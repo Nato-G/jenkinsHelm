@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        registry = "oekstein/DevOpsInterviewAssignment"
+        registry = "natog/microservice"
         registryCredential = 'docker_hub'
     }
     options {
@@ -10,9 +10,7 @@ pipeline {
     stages {
         stage('Pull Code') {
             steps {
-                script {
-                    sh 'echo pull code'
-                }
+                git url: 'https://github.com/Nato-G/jenkinsHelm.git', credentialsId: 'githubuser'
             }
         }
         stage('run tests') {
@@ -25,16 +23,25 @@ pipeline {
         stage('build and push image') {
             steps {
                 script {
-                    sh 'build and push image to hub'
+                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+                        def appImage = docker.build(registry)
+                        appImage.push()
                 }
             }
         }
         stage('deploy image') {
             steps {
                 script {
-                    sh 'build docker image'
+                    sh '''
+                        kubectl config use-context minikube
+                        kubectl set image deployment/microservice-deployment microservice=${registry}:latest
+                        kubectl rollout status deployment/microservice-deployment
+                    '''
                 }
             }
         }
     }
 }
+
+
+
