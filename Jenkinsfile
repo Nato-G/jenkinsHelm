@@ -20,6 +20,7 @@ pipeline {
             steps {
                 script {
                     sh 'echo run tests'
+                    sh 'docker --version'
                 }
             }
         }
@@ -27,7 +28,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-                        def appImage = docker.build(registry)
+                        def appImage = docker.build(registry, '.')
                         appImage.push()
                     }
                 }    
