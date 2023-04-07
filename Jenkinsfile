@@ -23,6 +23,7 @@ pipeline {
                     withEnv(["PATH+DOCKER=${DOCKER_PATH}"]) {
                         sh 'echo run tests'
                         sh 'docker --version'
+                    }    
                 }
             }
         }
