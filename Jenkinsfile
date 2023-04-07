@@ -40,7 +40,7 @@ pipeline {
                     sh "kubectl config use-context minikube"
                     sh "kubectl set image deployment/${KUBE_DEPLOYMENT_NAME} microservice=${REGISTRY}:latest -n ${KUBE_NAMESPACE}"
                     sh "kubectl rollout status deployment/${KUBE_DEPLOYMENT_NAME} -n ${KUBE_NAMESPACE}"
-                   
+                    } 
                 }
             }
         }
