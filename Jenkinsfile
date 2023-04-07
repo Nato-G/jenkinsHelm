@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Pull Code') {
             steps {
-                git url: 'https://github.com/Nato-G/jenkinsHelm.git', credentialsId: 'githubuser'
+                git url: 'https://github.com/Nato-G/jenkinsHelm.git', credentialsId: 'githubuser', branch: 'main'
             }
         }
         stage('run tests') {
