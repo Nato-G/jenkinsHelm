@@ -20,10 +20,9 @@ pipeline {
         stage('run tests') {
             steps {
                 script {
-                    withEnv(["PATH+DOCKER=${DOCKER_PATH}"]) {
-                        sh 'echo run tests'
-                        sh 'docker --version'
-                    }    
+                    sh 'echo run tests'
+                    sh '/usr/bin/docker --version'
+            
                 }
             }
         }
