@@ -6,6 +6,7 @@ pipeline {
         KUBE_NAMESPACE = "jenkins"
         KUBE_DEPLOYMENT_NAME = "microservice-deployment"
         KUBE_SA_CREDENTIALS = "f63a7a71-dfb7-4a2e-8661-566dd0fadacd"
+        DOCKER_PATH = "/usr/bin"
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5' ))
@@ -19,8 +20,9 @@ pipeline {
         stage('run tests') {
             steps {
                 script {
-                    sh 'echo run tests'
-                    sh 'docker --version'
+                    withEnv(["PATH+DOCKER=${DOCKER_PATH}"]) {
+                        sh 'echo run tests'
+                        sh 'docker --version'
                 }
             }
         }
