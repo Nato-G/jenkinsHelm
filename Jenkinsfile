@@ -1,5 +1,9 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            label 'app=dockeragent'
+        }
+    }
     environment {
         registry = "natog/microservice"
         registryCredential = 'dockerHubAccount'
