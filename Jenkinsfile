@@ -1,7 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            label 'app=dockeragent'
+           inheritFrom 'docker-agent'
         }
     }
     environment {
