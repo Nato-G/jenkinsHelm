@@ -25,7 +25,7 @@ pipeline {
                 }
             }
         }
-        stages('build and push image') {
+        stage('build and push image') {
             stage('build') {
                 steps {
                     sh 'docker build -t ${REGISTRY}:${IMAGE_TAG} .'
