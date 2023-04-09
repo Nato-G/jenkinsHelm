@@ -1,5 +1,22 @@
 pipeline {
-    agent any
+    agent {
+    kubernetes {
+        label 'microservice'
+        defaultContainer 'jnlp'
+        yamlFile 'deployment.yaml'
+        containerTemplate {
+            name 'jnlp'
+            image 'jenkins/inbound-agent'
+            args '${computer.jnlpmac} ${computer.name}'
+            ttyEnabled true
+            resourceRequestCpu '500m'
+            resourceLimitCpu '1'
+            resourceRequestMemory '1Gi'
+            resourceLimitMemory '2Gi'
+            command 'sh', '-c', 'cat /etc/issue && apk add --update --no-cache docker-cli'
+        }
+    }
+}
     environment {
         registry = "natog/microservice"
         registryCredential = 'dockerHubAccount'
