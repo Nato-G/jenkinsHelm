@@ -1,14 +1,10 @@
 pipeline {
-    agent {
-        docker {
-            image 'natog/microservice:latest'
-            registryUrl 'https://registry.hub.docker.com'
-            registryCredentialsId 'dockerHubAccount'
-        }
-    }
+    agent any
     environment {
-        registry = "natog/microservice"
+        REGITRY = "natog/microservice"
+        IMAGE_TAG = "latest"
         // registryCredential = 'dockerHubAccount'
+        DOCKERHUB_CREDENTIALS = withCredentials('dockerhubuser')
         KUBE_NAMESPACE = "jenkins"
         KUBE_DEPLOYMENT_NAME = "microservice-deployment"
         KUBE_SA_CREDENTIALS = "f63a7a71-dfb7-4a2e-8661-566dd0fadacd"
@@ -25,20 +21,25 @@ pipeline {
         stage('run tests') {
             steps {
                 script {
-                    sh 'echo run tests'
-                    // sh '/usr/bin/docker --version'
-            
+                    sh 'echo run tests'            
                 }
             }
         }
-        stage('build and push image') {
-            steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-                        def appImage = docker.build(registry, '.')
-                        appImage.push()
-                    }
-                }    
+        stages('build and push image') {
+            stage('build') {
+                steps {
+                    sh 'docker build -t ${REGISTRY}:${IMAGE_TAG} .'
+                }
+            }
+            stage('login') {
+                steps {
+                    sh 'echo $DOCKERHUB_CREDENTIALS_PWS | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+                }
+            }
+            stage('push') {
+                steps {
+                    sh 'docker push natog/microservice'
+                }
             }
         }
         stage('deploy image') {
@@ -54,3 +55,14 @@ pipeline {
         }
     }
 }
+
+
+
+            // steps {
+            //     script {
+            //         docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
+            //             def appImage = docker.build(registry, '.')
+            //             appImage.push()
+            //         }
+            //     }    
+            // }
