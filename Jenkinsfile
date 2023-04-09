@@ -21,7 +21,7 @@ pipeline {
             steps {
                 script {
                     sh 'echo run tests'
-                    sh '/usr/bin/docker --version'
+                    // sh '/usr/bin/docker --version'
             
                 }
             }
