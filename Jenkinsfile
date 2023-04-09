@@ -13,7 +13,8 @@ pipeline {
             resourceLimitCpu '1'
             resourceRequestMemory '1Gi'
             resourceLimitMemory '2Gi'
-            command 'sh', '-c', 'cat /etc/issue && apk add --update --no-cache docker-cli'
+            command ['sh', '-c', 'cat /etc/issue && apk add --update --no-cache docker-cli']
+
         }
     }
 }
