@@ -25,21 +25,19 @@ pipeline {
                 }
             }
         }
-        stage('build and push image') {
-            stage('build') {
-                steps {
-                    sh 'docker build -t ${REGISTRY}:${IMAGE_TAG} .'
-                }
+        stage('build image') {
+            steps {
+                sh 'docker build -t ${REGISTRY}:${IMAGE_TAG} .'
             }
-            stage('login') {
-                steps {
-                    sh 'echo $DOCKERHUB_CREDENTIALS_PWS | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-                }
+        } 
+        stage('login') {
+            steps {
+                sh 'echo $DOCKERHUB_CREDENTIALS_PWS | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
             }
-            stage('push') {
-                steps {
-                    sh 'docker push natog/microservice'
-                }
+        }
+        stage('push') {
+            steps {
+                sh 'docker push natog/microservice'
             }
         }
         stage('deploy image') {
