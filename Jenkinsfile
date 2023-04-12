@@ -1,10 +1,12 @@
 pipeline {
     agent any
+    
     environment {
-        REGITRY = "natog/microservice"
-        IMAGE_TAG = "latest"
-        // registryCredential = 'dockerHubAccount'
         DOCKERHUB_CREDENTIALS = withCredentials('dockerhubuser')
+        DOCKERHUB_REPO = "natog/microservice"
+        DOCKERHUB_USERNAME = 'natog'
+        DOCKER_IMAGE = "${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}"
+        IMAGE_TAG = "latest"        
         KUBE_NAMESPACE = "jenkins"
         KUBE_DEPLOYMENT_NAME = "microservice-deployment"
         KUBE_SA_CREDENTIALS = "f63a7a71-dfb7-4a2e-8661-566dd0fadacd"
@@ -25,28 +27,45 @@ pipeline {
                 }
             }
         }
+        // stage('build image') {
+        //     steps {
+        //         sh 'docker build -t ${REGISTRY}:${IMAGE_TAG} .'
+        //     }
+        // } 
         stage('build image') {
             steps {
-                sh 'docker build -t ${REGISTRY}:${IMAGE_TAG} .'
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
+                        def customImage = docker.build("${DOCKER_IMAGE}:${IMAGE_TAG}")
+                    }
+                }
             }
-        } 
-        stage('login') {
-            steps {
-                sh 'echo $DOCKERHUB_CREDENTIALS_PWS | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-            }
+            // steps {
+            //     sh 'echo $DOCKERHUB_CREDENTIALS_PWS | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
+            // }
         }
         stage('push') {
             steps {
-                sh 'docker push natog/microservice'
+                script {
+                    docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
+                        docker.image("${DOCKER_IMAGE}:${IMAGE_TAG}").push()
+                    }
+                }
             }
+            // steps {
+            //     sh 'docker push natog/microservice'
+            // }
         }
+
         stage('deploy image') {
             steps {
                 script {
                     withCredentials([kubernetesServiceAccountCredentials(credentialsId: KUBE_SA_CREDENTIALS, namespace: KUBE_NAMESPACE)]) {
-                    sh "kubectl config use-context minikube"
-                    sh "kubectl set image deployment/${KUBE_DEPLOYMENT_NAME} microservice=${registry}:latest -n ${KUBE_NAMESPACE}"
-                    sh "kubectl rollout status deployment/${KUBE_DEPLOYMENT_NAME} -n ${KUBE_NAMESPACE}"
+                        sh(script: """
+                            kubectl config use-context minikube
+                            kubectl set image deployment/${KUBE_DEPLOYMENT_NAME} microservice=${registry}:latest -n ${KUBE_NAMESPACE}
+                            kubectl rollout status deployment/${KUBE_DEPLOYMENT_NAME} -n ${KUBE_NAMESPACE}
+                        """)
                     } 
                 }
             }
