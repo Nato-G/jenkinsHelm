@@ -2,13 +2,13 @@ pipeline {
     agent {
         kubernetes {
             inheritFrom 'nato-docker-test'
-            yamlFile 'pod-template.yaml'
-            // containerTemplate {
-            //     name 'docker'
-            //     image 'docker:20.10.10'
-            //     command 'cat'
-            //     ttyEnabled true
-            // }
+            // yamlFile 'pod-template.yaml'
+            containerTemplate {
+                name 'docker'
+                image 'docker:20.10.10'
+                command 'cat'
+                ttyEnabled true
+            }
         }
     }
     
