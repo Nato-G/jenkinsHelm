@@ -8,7 +8,7 @@ pipeline {
                 image 'docker:20.10.10'
                 //command 'cat'
                 command 'sh'
-                args '-c', 'dockerd --host=unix:///var/run/docker.sock'
+                args ['-c', 'dockerd --host=unix:///var/run/docker.sock']
                 ttyEnabled true
             }
         }
