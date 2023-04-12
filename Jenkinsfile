@@ -1,7 +1,7 @@
 pipeline {
     agent {
         kubernetes {
-            inheritFrom 'jenkins-agent'
+            inheritFrom 'nato-docker-test'
         }
     }
     
