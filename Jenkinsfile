@@ -2,6 +2,12 @@ pipeline {
     agent {
         kubernetes {
             inheritFrom 'nato-docker-test'
+            containerTemplate {
+                name 'docker'
+                image 'docker:20.10.10'
+                command 'cat'
+                ttyEnabled true
+            }
         }
     }
     
@@ -15,9 +21,9 @@ pipeline {
         KUBE_DEPLOYMENT_NAME = "microservice-deployment"
         KUBE_SA_CREDENTIALS = "f63a7a71-dfb7-4a2e-8661-566dd0fadacd"
         // Add the Minikube Docker environment variables minikube docker-env
-        DOCKER_TLS_VERIFY = '1'
-        DOCKER_HOST = 'tcp://192.168.64.4:2376'
-        DOCKER_CERT_PATH = "${WORKSPACE}/.minikube_certs"
+        // DOCKER_TLS_VERIFY = '1'
+        // DOCKER_HOST = 'tcp://192.168.64.4:2376'
+        // DOCKER_CERT_PATH = "${WORKSPACE}/.minikube_certs"
 
     }
     options {
@@ -57,6 +63,7 @@ pipeline {
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
+                    docker.image("${DOCKER_IMAGE}:${IMAGE_TAG}").build("-t ${DOCKER_IMAGE}:${IMAGE_TAG} -f Dockerfile .")
                         docker.image("${DOCKER_IMAGE}:${IMAGE_TAG}").push()
                     }
                 }
