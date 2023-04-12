@@ -1,8 +1,12 @@
 pipeline {
-    agent any
+    agent {
+        kubernetes {
+            label 'jenkins-agent'
+        }
+    }
     
     environment {
-        DOCKERHUB_CREDENTIALS = withCredentials('dockerhubuser')
+        DOCKERHUB_CREDENTIALS = 'dockerhubuser'
         DOCKERHUB_REPO = "natog/microservice"
         DOCKERHUB_USERNAME = 'natog'
         DOCKER_IMAGE = "${DOCKERHUB_USERNAME}/${DOCKERHUB_REPO}"
@@ -20,20 +24,6 @@ pipeline {
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5' ))
     }
     stages {
-        stage('Prepare Minikube Certificates') {
-            steps {
-                sh 'mkdir -p ${WORKSPACE}/.minikube_certs'
-                withCredentials([
-                    file(credentialsId: 'minikube-ca', variable: 'MINIKUBE_CA'),
-                    file(credentialsId: 'minikube-cert', variable: 'MINIKUBE_CERT'),
-                    file(credentialsId: 'minikube-key', variable: 'MINIKUBE_KEY')
-                ]) {
-                    sh 'cp ${MINIKUBE_CA} ${WORKSPACE}/.minikube_certs/ca.pem'
-                    sh 'cp ${MINIKUBE_CERT} ${WORKSPACE}/.minikube_certs/cert.pem'
-                    sh 'cp ${MINIKUBE_KEY} ${WORKSPACE}/.minikube_certs/key.pem'
-                }
-            }
-        }
         stage('Pull Code') {
             steps {
                 git url: 'https://github.com/Nato-G/jenkinsHelm.git', credentialsId: 'githubuser', branch: 'main'
@@ -48,7 +38,7 @@ pipeline {
         }
         // stage('build image') {
         //     steps {
-        //         sh 'docker build -t ${REGISTRY}:${IMAGE_TAG} .'
+        //         sh 'docker build -t ${DOCKERHUB_REPO}:${IMAGE_TAG} .'
         //     }
         // } 
         stage('build image') {
