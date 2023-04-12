@@ -10,11 +10,30 @@ pipeline {
         KUBE_NAMESPACE = "jenkins"
         KUBE_DEPLOYMENT_NAME = "microservice-deployment"
         KUBE_SA_CREDENTIALS = "f63a7a71-dfb7-4a2e-8661-566dd0fadacd"
+        // Add the Minikube Docker environment variables minikube docker-env
+        DOCKER_TLS_VERIFY = '1'
+        DOCKER_HOST = 'tcp://192.168.64.4:2376'
+        DOCKER_CERT_PATH = "${WORKSPACE}/.minikube_certs"
+
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5' ))
     }
     stages {
+        stage('Prepare Minikube Certificates') {
+            steps {
+                sh 'mkdir -p ${WORKSPACE}/.minikube_certs'
+                withCredentials([
+                    file(credentialsId: 'minikube-ca', variable: 'MINIKUBE_CA'),
+                    file(credentialsId: 'minikube-cert', variable: 'MINIKUBE_CERT'),
+                    file(credentialsId: 'minikube-key', variable: 'MINIKUBE_KEY')
+                ]) {
+                    sh 'cp ${MINIKUBE_CA} ${WORKSPACE}/.minikube_certs/ca.pem'
+                    sh 'cp ${MINIKUBE_CERT} ${WORKSPACE}/.minikube_certs/cert.pem'
+                    sh 'cp ${MINIKUBE_KEY} ${WORKSPACE}/.minikube_certs/key.pem'
+                }
+            }
+        }
         stage('Pull Code') {
             steps {
                 git url: 'https://github.com/Nato-G/jenkinsHelm.git', credentialsId: 'githubuser', branch: 'main'
