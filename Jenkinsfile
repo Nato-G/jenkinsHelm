@@ -6,7 +6,9 @@ pipeline {
             containerTemplate {
                 name 'docker'
                 image 'docker:20.10.10'
-                command 'cat'
+                //command 'cat'
+                command 'sh'
+                args '-c', 'dockerd --host=unix:///var/run/docker.sock'
                 ttyEnabled true
             }
         }
