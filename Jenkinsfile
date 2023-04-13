@@ -21,9 +21,9 @@ spec:
     image: docker:20.10.10
     imagePullPolicy: Always
     command:
-      - slep
+      - cat
     args:
-      - 9999
+      - '1'
     securityContext:
       privileged: true
     tty: true
