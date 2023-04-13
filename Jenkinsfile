@@ -10,7 +10,9 @@ pipeline {
         KUBE_SA_CREDENTIALS = "f63a7a71-dfb7-4a2e-8661-566dd0fadacd"
     }
     agent {
-        kubernetes 
+        kubernetes {
+            POD_LABEL 'app:jenkins-agent'
+        }
         //     inheritFrom 'lucky'
 //             yaml """
 // kind: Pod
