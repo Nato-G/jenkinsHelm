@@ -22,11 +22,15 @@ spec:
     imagePullPolicy: Always
     command:
       - cat
-    args:
-      - '1'
     securityContext:
       privileged: true
     tty: true
+    volumeMounts:
+      - name: dockersock
+        mountPath: /var/docker.sock
+    volumes:
+      - name: dockersock
+      hostPath: /var/run/docker.sock
 """
             // containerTemplate {
             //     name 'docker'
