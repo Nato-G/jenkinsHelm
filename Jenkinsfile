@@ -23,6 +23,8 @@ spec:
       privileged: true
     tty: true
 """
+        }
+    }
 //     volumeMounts:
 //       - name: dockersock
 //         mountPath: /var/run/docker.sock
@@ -31,7 +33,7 @@ spec:
 //       hostPath: 
 //         path: /var/run/docker.sock          
 //         }    
-    }
+
     options {
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5' ))
     }
