@@ -30,8 +30,8 @@ spec:
         mountPath: /var/run/docker.sock
   volumes:
     - name: dockersock
-    hostPath: 
-      path: /var/run/docker.sock
+      hostPath: 
+        path: /var/run/docker.sock
 """
             // containerTemplate {
             //     name 'docker'
