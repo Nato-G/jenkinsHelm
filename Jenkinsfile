@@ -19,8 +19,8 @@ pipeline {
                 args '9999' 
                 ttyEnabled true
                 privileged true
-                volumeMounts: [name: 'dockersock', mountPath: '/var/run/docker.sock']
-                volumes: [ name: 'dockersock', hostPath: [path: '/var/run/docker.sock']] 
+                volumeMounts [name: 'dockersock', mountPath: '/var/run/docker.sock']
+                volumes [ name: 'dockersock', hostPath: path: '/var/run/docker.sock'] 
             }
         }    
     }
@@ -45,7 +45,11 @@ pipeline {
         //         sh 'docker build -t ${DOCKERHUB_REPO}:${IMAGE_TAG} .'
         //     }
         // } 
+        node(POD_LABEL) {
+
+        }
         stage('build image') {
+            container
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
@@ -53,9 +57,6 @@ pipeline {
                     }
                 }
             }
-            // steps {
-            //     sh 'echo $DOCKERHUB_CREDENTIALS_PWS | docker login -u $DOCKERHUB_CREDENTIALS_USR --password-stdin'
-            // }
         }
         stage('push') {
             steps {
