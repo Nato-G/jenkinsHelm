@@ -25,6 +25,9 @@ spec:
     volumeMounts:
       - name: dockersock
         mountPath: /var/run/docker.sock
+    env: 
+      - name: PATH
+      value: /usr/local/bin:$PATH
   volumes:
     - name: dockersock
       hostPath: 
@@ -73,7 +76,6 @@ spec:
                 }
             }
         }
-
         stage('deploy image') {
             steps {
                 script {
