@@ -25,9 +25,6 @@ spec:
     volumeMounts:
       - name: dockersock
         mountPath: /var/run/docker.sock
-    env: 
-      - name: PATH
-      value: /usr/local/bin:$PATH
   volumes:
     - name: dockersock
       hostPath: 
@@ -60,6 +57,7 @@ spec:
             // container
             steps {
                 script {
+                    sh 'export PATH=$PATH:/usr/local/bin'
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
                         def customImage = docker.build("${DOCKER_IMAGE}:${IMAGE_TAG}")
                     }
@@ -69,6 +67,7 @@ spec:
         stage('push') {
             steps {
                 script {
+                    sh 'export PATH=$PATH:/usr/local/bin'
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
                     docker.image("${DOCKER_IMAGE}:${IMAGE_TAG}").build("-t ${DOCKER_IMAGE}:${IMAGE_TAG} -f Dockerfile .")
                         docker.image("${DOCKER_IMAGE}:${IMAGE_TAG}").push()
