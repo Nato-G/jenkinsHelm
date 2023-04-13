@@ -18,7 +18,7 @@ spec:
   - name: docker
     image: docker:20.10.10
     imagePullPolicy: Always
-    command ['cat']
+    command: ['cat']
     securityContext:
       privileged: true
     tty: true
