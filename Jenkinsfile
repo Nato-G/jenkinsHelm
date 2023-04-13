@@ -11,7 +11,7 @@ pipeline {
     }
     agent {
         kubernetes {
-            POD_LABEL 'app:jenkins-agent'
+            label 'test'
         }
         //     inheritFrom 'lucky'
 //             yaml """
