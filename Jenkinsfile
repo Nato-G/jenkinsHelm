@@ -20,7 +20,7 @@ pipeline {
                 args '9999' 
                 ttyEnabled true
                 privileged true
-                volumeMounts [name: '', mountPath: '']
+                volumeMounts [name: 'dockersock', mountPath: '/var/run/docker.sock']
                 volumes [ name: 'dockersock', hostPath: [path: '/var/run/docker.sock']] 
             }
         }    
