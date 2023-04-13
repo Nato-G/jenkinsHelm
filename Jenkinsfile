@@ -11,28 +11,29 @@ pipeline {
     }
     agent {
         kubernetes {
-            yaml """
-kind: Pod
-spec:
-  containers:
-  - name: docker
-    image: docker:20.10.10
-    imagePullPolicy: Always
-    command: 
-      - sleep
-    args:
-      - 9999
-    securityContext:
-      privileged: true
-    tty: true
-    volumeMounts:
-      - name: dockersock
-        mountPath: /var/run/docker.sock
-  volumes:
-  - name: dockersock
-    hostPath: 
-      path: /var/run/docker.sock
-"""
+            inheritFrom 'lucky'
+//             yaml """
+// kind: Pod
+// spec:
+//   containers:
+//   - name: docker
+//     image: docker:20.10.10
+//     imagePullPolicy: Always
+//     command: 
+//       - sleep
+//     args:
+//       - 9999
+//     securityContext:
+//       privileged: true
+//     tty: true
+//     volumeMounts:
+//       - name: dockersock
+//         mountPath: /var/run/docker.sock
+//   volumes:
+//   - name: dockersock
+//     hostPath: 
+//       path: /var/run/docker.sock
+// """
         }
     }
     options {
