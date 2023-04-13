@@ -23,7 +23,7 @@ spec:
     command:
       - slepp
     args:
-      -99d
+      -9999
     securityContext:
       privileged: true
     tty: true
