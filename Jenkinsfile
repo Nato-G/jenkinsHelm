@@ -19,8 +19,8 @@ pipeline {
                 args '9999' 
                 ttyEnabled true
                 privileged true
-                volumeMounts [name: 'dockersock', mountPath: '/var/run/docker.sock']
-                volumes [ name: 'dockersock', hostPath: [path: '/var/run/docker.sock'] ]
+                // volumeMounts [name: 'dockersock', mountPath: '/var/run/docker.sock']
+                // volumes [ name: 'dockersock', hostPath: [path: '/var/run/docker.sock'] ]
             }
         }    
     }
@@ -40,14 +40,10 @@ pipeline {
                 }
             }
         }
-        // stage('build image') {
-        //     steps {
-        //         sh 'docker build -t ${DOCKERHUB_REPO}:${IMAGE_TAG} .'
-        //     }
-        // } 
-        node(POD_LABEL) {
+        
+        // node(POD_LABEL) {
 
-        }
+        // }
         stage('build image') {
             container
             steps {
@@ -67,9 +63,6 @@ pipeline {
                     }
                 }
             }
-            // steps {
-            //     sh 'docker push natog/microservice'
-            // }
         }
 
         stage('deploy image') {
