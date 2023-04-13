@@ -8,50 +8,38 @@ pipeline {
         KUBE_NAMESPACE = "jenkins"
         KUBE_DEPLOYMENT_NAME = "microservice-deployment"
         KUBE_SA_CREDENTIALS = "f63a7a71-dfb7-4a2e-8661-566dd0fadacd"
-        // Add the Minikube Docker environment variables minikube docker-env
-        // DOCKER_TLS_VERIFY = '1'
-        // DOCKER_HOST = 'tcp://192.168.64.4:2376'
-        // DOCKER_CERT_PATH = "${WORKSPACE}/.minikube_certs"
-
     }
 
     agent {
         kubernetes {
-            inheritFrom 'nato-docker-test'
-            yaml """
-            apiVersion: v1
-            kind: Pod
-            metadata:
-            labels:
-                app: jenkins
-            spec:
-            containers:
-            - name: jnlp
-                image: jenkins/inbound-agent:4.3-4
-                args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
-            - name: docker
-                image: docker:20.10.10
-                command:
-                - sh
-                - -c
-                - |
-                dockerd \
-                    --host=unix:///var/run/docker.sock \
-                    --host=tcp://0.0.0.0:2375 \
-                    --tls=false \
-                    --storage-driver=overlay2 \
-                    --bip=10.0.0.1/24 \
-                    --log-level=debug
-            securityContext:
-            privileged: true
-            tty: true
-            """ 
-
+            // inheritFrom 'nato-docker-test'
+            yaml '''
+kind: Pod
+spec:
+  containers:
+  - name: docker
+    image: docker:20.10.10
+    // imagePullPolicy: Always
+    command:
+    - sh
+    - -c
+    - |
+      dockerd \
+      --host=unix:///var/run/docker.sock \
+      --host=tcp://0.0.0.0:2375 \
+      --tls=false \
+      --storage-driver=overlay2 \
+      --bip=10.0.0.1/24 \
+      --log-level=debug
+    securityContext:
+      privileged: true
+    tty: true
+'''
             // containerTemplate {
             //     name 'docker'
             //     image 'docker:20.10.10'
-            //     command 'sh'
-            //     args '-c' 
+            //     command 'sleep'
+            //     args '9999' 
             //     ttyEnabled true
             // }
         }
