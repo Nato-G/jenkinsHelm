@@ -21,19 +21,19 @@ spec:
     image: docker:20.10.10
     // imagePullPolicy: Always
     command:
-    - sh
-    - -c
-    - |
-      dockerd \
-      --host=unix:///var/run/docker.sock \
-      --host=tcp://0.0.0.0:2375 \
-      --tls=false \
-      --storage-driver=overlay2 \
-      --bip=10.0.0.1/24 \
-      --log-level=debug
-    securityContext:
-      privileged: true
-    tty: true
+      - sh
+      - -c
+      - |
+        dockerd \
+        --host=unix:///var/run/docker.sock \
+        --host=tcp://0.0.0.0:2375 \
+        --tls=false \
+        --storage-driver=overlay2 \
+        --bip=10.0.0.1/24 \
+        --log-level=debug
+      securityContext:
+        privileged: true
+      tty: true
 '''
             // containerTemplate {
             //     name 'docker'
