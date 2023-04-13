@@ -14,13 +14,13 @@ pipeline {
         kubernetes {
             // inheritFrom 'nato-docker-test'
             containerTemplate {
-                name 'docker',
-                image 'docker:20.10.10',
-                command 'sleep',
+                name 'docker'
+                image 'docker:20.10.10'
+                command 'sleep'
                 args '9999' 
                 ttyEnabled true
                 privileged true
-                volumeMounts [name: '', mountPath: ''],
+                volumeMounts [name: '', mountPath: '']
                 volumes [ name: 'dockersock', hostPath: [path: '/var/run/docker.sock']] 
             }
 
