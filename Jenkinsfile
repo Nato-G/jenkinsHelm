@@ -1,19 +1,4 @@
 pipeline {
-    agent {
-        kubernetes {
-            inheritFrom 'nato-docker-test'
-            // yamlFile 'pod-template.yaml'
-            containerTemplate {
-                name 'docker'
-                image 'docker:20.10.10'
-                //command 'cat'
-                command 'sh'
-                args ['-c', 'dockerd --host=unix:///var/run/docker.sock']
-                ttyEnabled true
-            }
-        }
-    }
-    
     environment {
         DOCKERHUB_CREDENTIALS = 'dockerhubuser'
         DOCKERHUB_REPO = "natog/microservice"
@@ -29,6 +14,49 @@ pipeline {
         // DOCKER_CERT_PATH = "${WORKSPACE}/.minikube_certs"
 
     }
+
+    agent {
+        kubernetes {
+            inheritFrom 'nato-docker-test'
+            yaml """
+            apiVersion: v1
+            kind: Pod
+            metadata:
+            labels:
+                app: jenkins
+            spec:
+            containers:
+            - name: jnlp
+                image: jenkins/inbound-agent:4.3-4
+                args: ['\$(JENKINS_SECRET)', '\$(JENKINS_NAME)']
+            - name: docker
+                image: docker:20.10.10
+                command:
+                - sh
+                - -c
+                - |
+                dockerd \
+                    --host=unix:///var/run/docker.sock \
+                    --host=tcp://0.0.0.0:2375 \
+                    --tls=false \
+                    --storage-driver=overlay2 \
+                    --bip=10.0.0.1/24 \
+                    --log-level=debug
+            securityContext:
+            privileged: true
+            tty: true
+            """ 
+
+            // containerTemplate {
+            //     name 'docker'
+            //     image 'docker:20.10.10'
+            //     command 'sh'
+            //     args '-c' 
+            //     ttyEnabled true
+            // }
+        }
+    }
+
     options {
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5' ))
     }
