@@ -13,7 +13,7 @@ pipeline {
     agent {
         kubernetes {
             // inheritFrom 'nato-docker-test'
-            yaml '''
+            yaml """
 kind: Pod
 spec:
   containers:
@@ -21,13 +21,13 @@ spec:
     image: docker:20.10.10
     imagePullPolicy: Always
     command:
-      - slepp
+      - slep
     args:
-      -9999
+      - 9999
     securityContext:
       privileged: true
     tty: true
-'''
+"""
             // containerTemplate {
             //     name 'docker'
             //     image 'docker:20.10.10'
