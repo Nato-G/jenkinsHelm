@@ -9,7 +9,6 @@ pipeline {
         KUBE_DEPLOYMENT_NAME = "microservice-deployment"
         KUBE_SA_CREDENTIALS = "f63a7a71-dfb7-4a2e-8661-566dd0fadacd"
     }
-
     agent {
         kubernetes {
             // inheritFrom 'nato-docker-test'
