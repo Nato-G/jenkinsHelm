@@ -23,31 +23,8 @@ pipeline {
                 volumeMounts [name: '', mountPath: '']
                 volumes [ name: 'dockersock', hostPath: [path: '/var/run/docker.sock']] 
             }
-
-//             yaml """
-// kind: Pod
-// spec:
-//   containers:
-//   - name: docker
-//     image: docker:20.10.10
-//     imagePullPolicy: Always
-//     command:
-//       - cat
-//     securityContext:
-//       privileged: true
-//     tty: true
-//     volumeMounts:
-//       - name: dockersock
-//         mountPath: /var/run/docker.sock
-//   volumes:
-//     - name: dockersock
-//       hostPath: 
-//         path: /var/run/docker.sock
-// """
-            
-        }
+        }    
     }
-
     options {
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5' ))
     }
@@ -133,3 +110,26 @@ pipeline {
     //     --storage-driver=overlay2 \
     //     --bip=10.0.0.1/24 \
     //     --log-level=debug
+
+
+
+//             yaml """
+// kind: Pod
+// spec:
+//   containers:
+//   - name: docker
+//     image: docker:20.10.10
+//     imagePullPolicy: Always
+//     command:
+//       - cat
+//     securityContext:
+//       privileged: true
+//     tty: true
+//     volumeMounts:
+//       - name: dockersock
+//         mountPath: /var/run/docker.sock
+//   volumes:
+//     - name: dockersock
+//       hostPath: 
+//         path: /var/run/docker.sock
+// """
