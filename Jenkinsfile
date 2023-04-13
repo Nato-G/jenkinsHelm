@@ -22,16 +22,15 @@ spec:
     securityContext:
       privileged: true
     tty: true
-    volumeMounts:
-      - name: dockersock
-        mountPath: /var/run/docker.sock
-  volumes:
-    - name: dockersock
-      hostPath: 
-        path: /var/run/docker.sock
 """
-            
-        }    
+//     volumeMounts:
+//       - name: dockersock
+//         mountPath: /var/run/docker.sock
+//   volumes:
+//     - name: dockersock
+//       hostPath: 
+//         path: /var/run/docker.sock          
+//         }    
     }
     options {
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5' ))
@@ -57,7 +56,6 @@ spec:
             // container
             steps {
                 script {
-                    sh 'export PATH=$PATH:/usr/local/bin'
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
                         def customImage = docker.build("${DOCKER_IMAGE}:${IMAGE_TAG}")
                     }
@@ -67,7 +65,6 @@ spec:
         stage('push') {
             steps {
                 script {
-                    sh 'export PATH=$PATH:/usr/local/bin'
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
                     docker.image("${DOCKER_IMAGE}:${IMAGE_TAG}").build("-t ${DOCKER_IMAGE}:${IMAGE_TAG} -f Dockerfile .")
                         docker.image("${DOCKER_IMAGE}:${IMAGE_TAG}").push()
