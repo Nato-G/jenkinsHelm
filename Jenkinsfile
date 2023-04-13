@@ -13,33 +13,35 @@ pipeline {
     agent {
         kubernetes {
             // inheritFrom 'nato-docker-test'
-            yaml """
-kind: Pod
-spec:
-  containers:
-  - name: docker
-    image: docker:20.10.10
-    imagePullPolicy: Always
-    command:
-      - cat
-    securityContext:
-      privileged: true
-    tty: true
-    volumeMounts:
-      - name: dockersock
-        mountPath: /var/run/docker.sock
-  volumes:
-    - name: dockersock
-      hostPath: 
-        path: /var/run/docker.sock
-"""
-            // containerTemplate {
-            //     name 'docker'
-            //     image 'docker:20.10.10'
-            //     command 'sleep'
-            //     args '9999' 
-            //     ttyEnabled true
-            // }
+            containerTemplate {
+                name 'docker'
+                image 'docker:20.10.10'
+                command 'sleep'
+                args '9999' 
+                ttyEnabled true
+            }
+
+//             yaml """
+// kind: Pod
+// spec:
+//   containers:
+//   - name: docker
+//     image: docker:20.10.10
+//     imagePullPolicy: Always
+//     command:
+//       - cat
+//     securityContext:
+//       privileged: true
+//     tty: true
+//     volumeMounts:
+//       - name: dockersock
+//         mountPath: /var/run/docker.sock
+//   volumes:
+//     - name: dockersock
+//       hostPath: 
+//         path: /var/run/docker.sock
+// """
+            
         }
     }
 
