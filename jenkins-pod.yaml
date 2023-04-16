@@ -1,0 +1,28 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: jenkins-agent-pod
+spec:
+  containers:
+  - name: agent
+    image: natog/jenkins-agent:latest
+    imagePullPolicy: Always
+    command:
+      - sleep
+    args:
+      - "9999"
+    env:
+      - name: JENKINS_SECRET
+        value: "${computer.jnlpmac}"
+      - name: JENKINS_NAME
+        value: "${computer.name}"
+    securityContext:
+      privileged: true
+    tty: true
+    volumeMounts:
+       - name: dockersock
+         mountPath: /var/run/docker.sock
+  volumes:
+   - name: dockersock
+     hostPath: 
+       path: /var/run/docker.sock
