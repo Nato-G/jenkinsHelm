@@ -3,12 +3,14 @@ kind: Pod
 metadata:
   name: jenkins-agent-pod
 spec:
+  securityContext:
+      runAsUser: 0
+      privileged: true
   containers:
   - name: agent
     image: natog/jenkins-agent:latest
     imagePullPolicy: Always
-    securityContext:
-      privileged: true
+    
     tty: true
     command:
       - sh
