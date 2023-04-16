@@ -27,11 +27,7 @@ pipeline {
                 sh 'echo $PATH'
             }
         }
-        stage('Add user to docker group') {
-            steps {
-            sh 'sudo usermod -aG docker $USER'
-        }
-}
+    }
         stage('Check Docker socket') {
             steps {
                 sh 'echo $DOCKER_HOST'
