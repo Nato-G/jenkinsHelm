@@ -6,11 +6,11 @@ spec:
   securityContext:
       runAsUser: 0
       privileged: true
+  hostNetwork: true 
   containers:
   - name: agent
     image: natog/jenkins-agent:latest
     imagePullPolicy: Always
-    
     tty: true
     command:
       - sh
