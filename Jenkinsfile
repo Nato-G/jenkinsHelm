@@ -27,7 +27,6 @@ pipeline {
                 sh 'echo $PATH'
             }
         }
-    }
         stage('Check Docker socket') {
             steps {
                 sh 'echo $DOCKER_HOST'
@@ -46,7 +45,6 @@ pipeline {
                 }
             }
         }
-        
         stage('build image') {
             steps {
                 script {
