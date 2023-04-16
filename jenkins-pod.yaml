@@ -7,10 +7,13 @@ spec:
   - name: agent
     image: natog/jenkins-agent:latest
     imagePullPolicy: Always
+    securityContext:
+      privileged: true
+    tty: true
     command:
       - sh
       - -c
-      - "nohup sh -c 'dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay2' > /var/log/docker.log 2>&1 &"
+      - "'dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay2' > /var/log/docker.log 2>&1 &"
 
       # - "dockerd --privileged=true -D --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay2 & wait $!"
       # - |
@@ -25,9 +28,7 @@ spec:
         value: "${computer.jnlpmac}"
       - name: JENKINS_NAME
         value: "${computer.name}"
-    securityContext:
-      privileged: true
-    tty: true
+    
     volumeMounts:
        - name: dockersock
          mountPath: /var/run/docker.sock
