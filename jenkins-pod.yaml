@@ -10,7 +10,9 @@ spec:
     command:
       - /bin/sh
       - -c
-      - "dockerd --privileged=true -D --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay2 & wait $!"
+      - "nohup sh -c 'dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay2' > /var/log/docker.log 2>&1 &"
+
+      # - "dockerd --privileged=true -D --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay2 & wait $!"
       # - |
       #   dockerd
     # command:
