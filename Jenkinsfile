@@ -16,6 +16,10 @@ pipeline {
         kubernetes {
             inheritFrom 'jenkins-n-agent'
             yamlFile 'jenkins-pod.yaml'
+            containerTemplate {
+                privileged true
+                ttyEnabled true
+            }
         }  
     } 
     
@@ -48,11 +52,7 @@ pipeline {
             }
         }
         
-        // node(POD_LABEL) {
-
-        // }
         stage('build image') {
-            // container
             steps {
                 script {
                     docker.withRegistry('https://index.docker.io/v1/', "${DOCKERHUB_CREDENTIALS}") {
@@ -88,17 +88,6 @@ pipeline {
 }
 
 
-
-            // steps {
-            //     script {
-            //         docker.withRegistry('https://registry.hub.docker.com', registryCredential) {
-            //             def appImage = docker.build(registry, '.')
-            //             appImage.push()
-            //         }
-            //     }    
-            // }
-
-
             //   - sh
     //   - -c
     //   - |
@@ -115,7 +104,6 @@ pipeline {
 
 
 
-// inheritFrom 'nato-docker-test'
             // containerTemplate {
             //     name 'docker'
             //     image 'docker:20.10.10'
