@@ -30,7 +30,6 @@ pipeline {
         stage('Check Docker socket') {
             steps {
                 sh 'echo $DOCKER_HOST'
-                sh 'ls -la /var/run/docker.sock'
             }
         }    
         stage('Pull Code') {
