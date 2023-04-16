@@ -14,10 +14,6 @@ pipeline {
     agent {
         kubernetes {
             yamlFile 'jenkins-pod.yaml'
-            // containerTemplate {
-            //     privileged true
-            //     ttyEnabled true
-            // }
         }  
     } 
     
