@@ -16,9 +16,8 @@ pipeline {
         kubernetes {
             inheritFrom 'jenkins-n-agent'
             yamlFile 'jenkins-pod.yaml'
-            }  
-        }
-    }
+        }  
+    } 
     
     options {
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5' ))
