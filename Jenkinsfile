@@ -24,11 +24,11 @@ pipeline {
     }
 
     stages {
-        stage('Copy YAML file to workspace') {
-            steps {
-                sh 'cp jenkins-pod.yaml ${WORKSPACE}'
-            }
-        }
+        // stage('Copy YAML file to workspace') {
+        //     steps {
+        //         sh 'cp jenkins-pod.yaml ${WORKSPACE}'
+        //     }
+        // }
         stage('Pull Code') {
             steps {
                 git url: 'https://github.com/Nato-G/jenkinsHelm.git', credentialsId: 'githubuser', branch: 'main'
