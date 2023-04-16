@@ -9,38 +9,18 @@ pipeline {
         KUBE_DEPLOYMENT_NAME = "microservice-deployment"
         KUBE_SA_CREDENTIALS = "f63a7a71-dfb7-4a2e-8661-566dd0fadacd"
     }
+    
     agent {
         kubernetes {
-            label 'test'
+            label 'jenkins-n-agent'
+            yamlFile 'jenkins-pod.yaml'
         }
-        //     inheritFrom 'lucky'
-//             yaml """
-// kind: Pod
-// spec:
-//   containers:
-//   - name: docker
-//     image: docker:20.10.10
-//     imagePullPolicy: Always
-//     command: 
-//       - sleep
-//     args:
-//       - 9999
-//     securityContext:
-//       privileged: true
-//     tty: true
-//     volumeMounts:
-//       - name: dockersock
-//         mountPath: /var/run/docker.sock
-//   volumes:
-//   - name: dockersock
-//     hostPath: 
-//       path: /var/run/docker.sock
-// """
-        // }
     }
+    
     options {
         buildDiscarder(logRotator(numToKeepStr: '20', daysToKeepStr: '5' ))
     }
+
     stages {
         stage('Pull Code') {
             steps {
