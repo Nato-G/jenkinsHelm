@@ -8,12 +8,19 @@ pipeline {
         KUBE_NAMESPACE = "jenkins"
         KUBE_DEPLOYMENT_NAME = "microservice-deployment"
         KUBE_SA_CREDENTIALS = "f63a7a71-dfb7-4a2e-8661-566dd0fadacd"
+        PATH = "/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin"
+
     }
     
     agent {
         kubernetes {
-            label 'jenkins-n-agent'
+            inheritFrom 'jenkins-n-agent'
             yamlFile 'jenkins-pod.yaml'
+            containerTemplate {
+                envVars {
+                key 'PATH', value '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/openjdk-11/bin'
+                }
+            }  
         }
     }
     
@@ -22,6 +29,11 @@ pipeline {
     }
 
     stages {
+        stage('Copy YAML file to workspace') {
+            steps {
+                sh 'cp jenkins-pod.yaml ${WORKSPACE}'
+            }
+        }
         stage('Pull Code') {
             steps {
                 git url: 'https://github.com/Nato-G/jenkinsHelm.git', credentialsId: 'githubuser', branch: 'main'
