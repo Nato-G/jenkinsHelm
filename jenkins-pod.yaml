@@ -10,7 +10,7 @@ spec:
     command:
       - /bin/sh
       - -c
-      - "sudo dockerd --privileged=true -D --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay2 & wait $!"
+      - "dockerd --privileged=true -D --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay2 & wait $!"
       # - |
       #   dockerd
     # command:
@@ -23,8 +23,6 @@ spec:
         value: "${computer.jnlpmac}"
       - name: JENKINS_NAME
         value: "${computer.name}"
-      # - name: PATH
-      #   value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
     securityContext:
       privileged: true
     tty: true
