@@ -10,13 +10,14 @@ spec:
     command:
       - /bin/sh
       - -c
-      - |
-        dockerd
+      - "dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay2 & wait $!"
+      # - |
+      #   dockerd
     # command:
     #   - sleep
-    args:
-      - "sleep"
-      - "9999"
+    # args:
+    #   - "sleep"
+    #   - "9999"
     env:
       - name: JENKINS_SECRET
         value: "${computer.jnlpmac}"
