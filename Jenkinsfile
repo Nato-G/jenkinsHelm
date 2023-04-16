@@ -16,10 +16,6 @@ pipeline {
         kubernetes {
             inheritFrom 'jenkins-n-agent'
             yamlFile 'jenkins-pod.yaml'
-            containerTemplate {
-                envVars {
-                key 'PATH', value '/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/openjdk-11/bin'
-                }
             }  
         }
     }
