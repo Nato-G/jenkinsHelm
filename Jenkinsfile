@@ -29,7 +29,12 @@ pipeline {
                 sh 'echo $PATH'
             }
         }
-
+        stage('Check Docker socket') {
+            steps {
+                sh 'echo $DOCKER_HOST'
+                sh 'ls -la /var/run/docker.sock'
+            }
+        }    
         stage('Pull Code') {
             steps {
                 git url: 'https://github.com/Nato-G/jenkinsHelm.git', credentialsId: 'githubuser', branch: 'main'
