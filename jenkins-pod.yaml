@@ -16,8 +16,8 @@ spec:
         value: "${computer.jnlpmac}"
       - name: JENKINS_NAME
         value: "${computer.name}"
-      - name: PATH
-        value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
+      # - name: PATH
+      #   value: /usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin
     securityContext:
       privileged: true
     tty: true
