@@ -8,8 +8,14 @@ spec:
     image: natog/jenkins-agent:latest
     imagePullPolicy: Always
     command:
-      - sleep
+      - /bin/sh
+      - -c
+      - |
+        dockerd
+    # command:
+    #   - sleep
     args:
+      - "sleep"
       - "9999"
     env:
       - name: JENKINS_SECRET
