@@ -14,7 +14,7 @@ spec:
       - sh
       - -c
       - |
-        groupadd -g $(stat -c '%g' /var/run/docker.sock) docker && usermod -aG docker jenkins && service docker start && tail -f /dev/null
+        usermod -aG docker jenkins && service docker start && tail -f /dev/null
 
       # - "service docker start && tail -f /dev/null"
       # - "'dockerd --host=unix:///var/run/docker.sock --host=tcp://0.0.0.0:2375 --storage-driver=overlay2' > /var/log/docker.log 2>&1 &"
